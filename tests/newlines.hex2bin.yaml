@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+---
+stdin: |-
+  41 0A
+  42 0D
+  43 0A0D
+  44 0D0A
+  45
+stdout: "A\nB\rC\n\rD\r\nE"
+stderr: ""
+returncode: 0

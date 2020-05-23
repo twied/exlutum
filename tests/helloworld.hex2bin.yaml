@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+---
+stdin: "68656C6C6F 20 776F726C64"
+stdout: "hello world"
+stderr: ""
+returncode: 0

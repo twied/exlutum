@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+---
+stdin: |-
+  41
+  42#43
+  44#45#
+  #46
+  # comment ends in new line
+  # comment ends with eof
+stdout: "ABD"
+stderr: ""
+returncode: 0
