@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+---
+stdin: |-
+  .aaaa: F1
+  .bbbb: F2
+  .cccc: F3
+  aaaa bbbb cccc
+  .dddd: eeee
+  .eeee: dddd
+  # comments should disappear
+stdout: |-
+  F1
+  F2
+  F3
+  00800408 01800408 02800408
+  13800408
+  0F800408
+stderr: ""
+returncode: 0
