@@ -25,6 +25,7 @@ set_property(
 
 set_property(
 	CACHE EXLUTUM_LABEL2HEX PROPERTY STRINGS
+	"label2hex_c"
 	"label2hex_cpp"
 )
 

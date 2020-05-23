@@ -13,6 +13,7 @@ add_subdirectory(hex2bin_c)
 add_subdirectory(hex2bin_hex)
 add_subdirectory(hex2bin_nasm)
 
+add_subdirectory(label2hex_c)
 add_subdirectory(label2hex_cpp)
 
 add_subdirectory(macro2label_cpp)
