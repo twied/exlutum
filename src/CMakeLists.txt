@@ -9,3 +9,5 @@ function(do_test program_under_test fixture)
 endfunction(do_test)
 
 add_subdirectory(hex2bin_c)
+
+add_subdirectory(label2hex_cpp)
