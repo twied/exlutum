@@ -11,3 +11,5 @@ endfunction(do_test)
 add_subdirectory(hex2bin_c)
 
 add_subdirectory(label2hex_cpp)
+
+add_subdirectory(macro2label_cpp)
