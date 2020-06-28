@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+---
+stdin: |-
+  %macro: "foobar"
+  macro.label: 01 23 45 67
+returncode: 1
