@@ -1,0 +1,83 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+
+# The infamous FizzBuzz program in Arabilis.
+
+# Read a byte (8 bits) from the given address.
+# asm function read8(addr) {
+#     00 | 8B 44 24 04          mov eax, [esp + 0x04]
+#     04 | 0F BE 00             movzx eax, byte[eax]
+#     07 | C3                   ret
+# }
+var read8 = "\x8B\x44\x24\x04\x0F\xBE\x00\xC3";
+
+# Perform a syscall. Return value depends on the syscall.
+# asm function syscall(eax, ebx, ecx, edx, esi, edi) {
+#     00 | 55                   push    ebp
+#     01 | 89 E5                mov     ebp, esp
+#     03 | 53                   push    ebx
+#     04 | 51                   push    ecx
+#     05 | 52                   push    edx
+#     06 | 56                   push    esi
+#     07 | 57                   push    edi
+#     08 | 8B 45 08             mov     eax, dword [ebp + 0x08]
+#     0B | 8B 5D 0C             mov     ebx, dword [ebp + 0x0C]
+#     0E | 8B 4D 10             mov     ecx, dword [ebp + 0x10]
+#     11 | 8B 55 14             mov     edx, dword [ebp + 0x14]
+#     14 | 8B 75 18             mov     esi, dword [ebp + 0x18]
+#     17 | 8B 7D 1C             mov     edi, dword [ebp + 0x1C]
+#     1A | CD 80                int     0x80
+#     1C | 5F                   pop     edi
+#     1D | 5E                   pop     esi
+#     1E | 5A                   pop     edx
+#     1F | 59                   pop     ecx
+#     20 | 5B                   pop     ebx
+#     21 | 5D                   pop     ebp
+#     22 | C3                   ret
+# }
+var syscall = "\x55\x89\xE5\x53\x51\x52\x56\x57\x8B\x45\x08\x8B\x5D\x0C\x8B\x4D\x10\x8B\x55\x14\x8B\x75\x18\x8B\x7D\x1C\xCD\x80\x5F\x5E\x5A\x59\x5B\x5D\xC3";
+
+function putchar(pchar) {
+        syscall(4, 1, pchar, 1, 0, 0);
+}
+
+function print(pstring) {
+        while (read8(pstring)) {
+                putchar(pstring);
+                let pstring = pstring + 1;
+        }
+}
+
+function printnum(value) {
+        if (value >= 10) {
+                printnum(value / 10);
+                let value = value % 10;
+        }
+
+        var char = 48 + value;
+        putchar(&char);
+}
+
+function main() {
+        for(var i = 1; i < 20; let i = i + 1) {
+                if ((i % 15) == 0) {
+                        print("FizzBuzz ");
+                        continue;
+                }
+
+                if ((i % 3) == 0) {
+                        print("Fizz ");
+                        continue;
+                }
+
+                if ((i % 5) == 0) {
+                        print("Buzz ");
+                        continue;
+                }
+
+                printnum(i);
+                print(" ");
+        }
+        print("\n");
+        return 0;
+}

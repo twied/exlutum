@@ -1,0 +1,49 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+
+# A sample program in the "LABEL" language that outputs "Hello World!".
+
+                                #       Elf32_Ehdr: 0x08048000
+7F 45 4C 46 01 01 01 00         #               e_ident[0:7]
+00 00 00 00 00 00 00 00         #               e_ident[8:15]
+02 00                           #               e_type
+03 00                           #               e_machine
+01 00 00 00                     #               e_version
+start                           #               e_entry = start
+34 00 00 00                     #               e_phoff = Elf32_Phdr - Elf32_Ehdr
+00 00 00 00                     #               e_shoff = 0
+00 00 00 00                     #               e_flags
+34 00                           #               e_ehsize = Elf32_Phdr - Elf32_Ehdr
+20 00                           #               e_phentsize = sizeof(Elf32_Phdr)
+01 00                           #               e_phnum
+28 00                           #               e_shentsize = sizeof(Elf32_Shdr)
+00 00                           #               e_shnum
+00 00                           #               e_shstrndx
+
+                                #       Elf32_Phdr: 0x08048034
+01 00 00 00                     #               p_type
+00 00 00 00                     #               p_offset
+00 80 04 08                     #               p_vaddr
+00 80 04 08                     #               p_paddr
+2A 01 00 00                     #               p_filesz = eof - Elf32_Ehdr
+2A 01 00 00                     #               p_memsz = eof - Elf32_Ehdr
+07 00 00 00                     #               p_flags
+00 00 00 00                     #               p_align
+
+
+.msg:                           #       msg:
+48 65 6C 6C 6F 20 57 6F         #               db 'Hello World!\n', 0
+72 6C 64 21 0A 00               #
+
+.start:                         #       start:
+B8 04 00 00 00                  #               mov     eax,    0x00000004
+BB 01 00 00 00                  #               mov     ebx,    0x00000001
+B9 msg                          #               mov     ecx,    msg
+BA 0D 00 00 00                  #               mov     edx,    0x0000000d
+CD 80                           #               int     0x80
+
+
+                                #               ; exit(0);
+B8 01 00 00 00                  #               mov     eax,    0x00000001
+BB 00 00 00 00                  #               mov     ebx,    0x00000000
+CD 80                           #               int     0x80

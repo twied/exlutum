@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+
+# A sample program in the "HEX" language that does nothing more than
+# terminating with status code 42.
+
+                                #       Elf32_Ehdr: 0x08048000
+7F 45 4C 46 01 01 01 00         #               e_ident[0:7]
+00 00 00 00 00 00 00 00         #               e_ident[8:15]
+02 00                           #               e_type
+03 00                           #               e_machine
+01 00 00 00                     #               e_version
+54 80 04 08                     #               e_entry = _start
+34 00 00 00                     #               e_phoff = Elf32_Phdr - Elf32_Ehdr
+00 00 00 00                     #               e_shoff = 0
+00 00 00 00                     #               e_flags
+34 00                           #               e_ehsize = Elf32_Phdr - Elf32_Ehdr
+20 00                           #               e_phentsize = sizeof(Elf32_Phdr)
+01 00                           #               e_phnum
+28 00                           #               e_shentsize = sizeof(Elf32_Shdr)
+00 00                           #               e_shnum
+00 00                           #               e_shstrndx
+
+                                #       Elf32_Phdr: 0x08048034
+01 00 00 00                     #               p_type
+00 00 00 00                     #               p_offset
+00 80 04 08                     #               p_vaddr
+00 80 04 08                     #               p_paddr
+60 00 00 00                     #               p_filesz = eof - Elf32_Ehdr
+60 00 00 00                     #               p_memsz = eof - Elf32_Ehdr
+07 00 00 00                     #               p_flags
+00 00 00 00                     #               p_align
+
+                                #       _start: 0x08048054
+                                #               ; exit(42);
+B8 01 00 00 00                  #               mov     eax,    0x00000001
+BB 2A 00 00 00                  #               mov     ebx,    0x0000002A
+CD 80                           #               int     0x80

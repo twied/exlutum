@@ -1,0 +1,74 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+
+# A sample program in the "MACRO" language that outputs "Hello Macro!".
+
+%pushi:         "68"
+%mov_eax:       "B8"
+%call_eax:      "FF D0"
+
+                                #       Elf32_Ehdr: 0x08048000
+7F 45 4C 46 01 01 01 00         #               e_ident[0:7]
+00 00 00 00 00 00 00 00         #               e_ident[8:15]
+02 00                           #               e_type
+03 00                           #               e_machine
+01 00 00 00                     #               e_version
+start                           #               e_entry = start
+34 00 00 00                     #               e_phoff = Elf32_Phdr - Elf32_Ehdr
+00 00 00 00                     #               e_shoff = 0
+00 00 00 00                     #               e_flags
+34 00                           #               e_ehsize = Elf32_Phdr - Elf32_Ehdr
+20 00                           #               e_phentsize = sizeof(Elf32_Phdr)
+01 00                           #               e_phnum
+28 00                           #               e_shentsize = sizeof(Elf32_Shdr)
+00 00                           #               e_shnum
+00 00                           #               e_shstrndx
+
+                                #       Elf32_Phdr: 0x08048034
+01 00 00 00                     #               p_type
+00 00 00 00                     #               p_offset
+00 80 04 08                     #               p_vaddr
+00 80 04 08                     #               p_paddr
+2A 01 00 00                     #               p_filesz = eof - Elf32_Ehdr
+2A 01 00 00                     #               p_memsz = eof - Elf32_Ehdr
+07 00 00 00                     #               p_flags
+00 00 00 00                     #               p_align
+
+
+.msg:                           # db 'Hello Macro!\n', 0
+        48 65 6C 6C 6F 20 4D 61
+        63 72 6F 21 0A 00
+
+.syscall:                       #       syscall:
+        55                      #               push    ebp
+        89 E5                   #               mov     ebp, esp
+        53                      #               push    ebx
+        51                      #               push    ecx
+        52                      #               push    edx
+        8B 45 08                #               mov     eax, [ebp + 0x08]
+        8B 5D 0C                #               mov     ebx, [ebp + 0x0C]
+        8B 4D 10                #               mov     ecx, [ebp + 0x10]
+        8B 55 14                #               mov     edx, [ebp + 0x14]
+        CD 80                   #               int     0x80
+        5A                      #               pop     edx
+        59                      #               pop     ecx
+        5B                      #               pop     ebx
+        5D                      #               pop     ebp
+        C3                      #               ret
+
+.start:
+        # syscall(0x04, 0x01, msg, len(msg));
+        pushi   0D 00 00 00
+        pushi   msg
+        pushi   01 00 00 00
+        pushi   04 00 00 00
+        mov_eax syscall
+        call_eax
+
+        # syscall(0x01, 0x00, 0x00, 0x00);
+        pushi   00 00 00 00
+        pushi   00 00 00 00
+        pushi   00 00 00 00
+        pushi   01 00 00 00
+        mov_eax syscall
+        call_eax
