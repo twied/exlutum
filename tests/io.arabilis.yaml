@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+---
+arguments: [ "--only-io" ]
+stdin: |-
+  A	B
+  C
+stdout: |-
+  interactive:1:0: A (65)
+  interactive:1:1: ? (9)
+  interactive:1:8: B (66)
+  interactive:1:9: ? (10)
+  interactive:2:0: C (67)
+stderr: ""
+returncode: 0
