@@ -2,13 +2,16 @@
 // Copyright 2020 Tim Wiederhake
 
 #include "io.h"
+#include "frontend.h"
 
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <string>
 
 enum class mode {
     only_io,
+    only_lex,
     default_mode
 };
 
@@ -19,6 +22,14 @@ static void usage(std::ostream& stream) {
         << "--help                  Display this information.\n"
         << "-o, --out-file <file>   Place the output into <file>. " \
             "Defaults to stdout.\n";
+}
+
+static char visual_char(int c) {
+    if (c >= 32 && c < 127) {
+        return c;
+    }
+
+    return '?';
 }
 
 static int mode_only_io(arabilis::Reader& reader, arabilis::Writer& writer) {
@@ -32,17 +43,42 @@ static int mode_only_io(arabilis::Reader& reader, arabilis::Writer& writer) {
             break;
         }
 
-        const char v = (c >= 32 && c < 127) ? c : '?';
-
         writer
             << filename
             << ':'
             << position
             << ": "
-            << v
+            << visual_char(c)
             << " ("
             << c
             << ")\n";
+    }
+
+    return 0;
+}
+
+static int mode_only_lex(arabilis::Lexer& lexer, arabilis::Writer& writer) {
+    const std::string& filename = lexer.filename();
+
+    for (;;) {
+        const arabilis::Token token = lexer.read();
+        if (token == arabilis::Token::eof) {
+            break;
+        }
+
+        std::string name = arabilis::token_to_name(token);
+        switch(token) {
+        case arabilis::Token::identifier:
+        case arabilis::Token::numeral:
+        case arabilis::Token::literal:
+            name += " (\"" + lexer.data() + + "\")";
+            break;
+        default:
+            break;
+        }
+
+        std::transform(name.begin(), name.end(), name.begin(), visual_char);
+        writer << filename << ':' << lexer.position() << ": " << name << '\n';
     }
 
     return 0;
@@ -105,6 +141,16 @@ int main(int argc, char* argv[]) {
                 continue;
             }
 
+            if (arg == "--only-lex") {
+                if (mode != mode::default_mode) {
+                    std::cerr << "Error: Invalid mode combination\n";
+                    std::exit(1);
+                }
+
+                mode = mode::only_lex;
+                continue;
+            }
+
             std::cerr << "Error: Unknown parameter \"" << arg << "\"\n\n";
             usage(std::cerr);
             std::exit(1);
@@ -156,6 +202,12 @@ int main(int argc, char* argv[]) {
 
     if (mode == mode::only_io) {
         return mode_only_io(reader, writer);
+    }
+
+    arabilis::Lexer lexer { reader };
+
+    if (mode == mode::only_lex) {
+        return mode_only_lex(lexer, writer);
     }
 
     return 1;

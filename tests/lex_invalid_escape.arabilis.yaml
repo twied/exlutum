@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+---
+arguments: [ "--only-lex" ]
+stdin: |
+  "\x1g"
+returncode: 1

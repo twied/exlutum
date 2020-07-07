@@ -75,6 +75,8 @@ public:
     /* Read single byte cast to int or -1 on EOF. */
     int read() noexcept;
 
+    friend std::ostream& operator<<(std::ostream&, const Reader&);
+
 private:
     std::string m_filename;
     std::istream& m_stream;

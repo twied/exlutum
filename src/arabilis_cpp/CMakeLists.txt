@@ -4,8 +4,17 @@
 add_executable(
 	arabilis_cpp
 	arabilis.cpp
+	ast.cpp
+	ast.h
+	frontend.cpp
+	frontend.h
 	io.cpp
 	io.h
 )
 
 do_test(arabilis_cpp io.arabilis)
+do_test(arabilis_cpp lex.arabilis)
+do_test(arabilis_cpp lex_invalid_escape.arabilis)
+do_test(arabilis_cpp lex_unknown_escape.arabilis)
+do_test(arabilis_cpp lex_unknown_token.arabilis)
+do_test(arabilis_cpp lex_unterminated_string.arabilis)

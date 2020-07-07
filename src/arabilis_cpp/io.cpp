@@ -48,4 +48,8 @@ int Reader::read() noexcept {
     return c;
 }
 
+std::ostream& operator<<(std::ostream& stream, const Reader& reader) {
+    return stream << reader.filename() << ':' << reader.position() << ':';
+}
+
 } /* namespace arabilis */

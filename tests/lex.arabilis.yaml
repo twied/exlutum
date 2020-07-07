@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+---
+arguments: [ "--only-lex" ]
+stdin: |-
+  # keywords
+  break continue else false for function if let return true var while
+  # numerals, literals and identifiers
+  0 42 "0" "42" zero fourtytwo
+  # escapes
+  "\x68\x65\x6c\x6c\x6F" "\\" "\"" "\n" "\r" "\t"
+  # operators etc.
+  ( ) { } , ; + - * / % ~ ^ & && | || = == ! != < <= > >=
+stdout: |-
+  interactive:2:0: break
+  interactive:2:6: continue
+  interactive:2:15: else
+  interactive:2:20: false
+  interactive:2:26: for
+  interactive:2:30: function
+  interactive:2:39: if
+  interactive:2:42: let
+  interactive:2:46: return
+  interactive:2:53: true
+  interactive:2:58: var
+  interactive:2:62: while
+  interactive:4:0: NUMERAL ("0")
+  interactive:4:2: NUMERAL ("42")
+  interactive:4:5: STRING ("0")
+  interactive:4:9: STRING ("42")
+  interactive:4:14: IDENTIFIER ("zero")
+  interactive:4:19: IDENTIFIER ("fourtytwo")
+  interactive:6:0: STRING ("hello")
+  interactive:6:23: STRING ("\")
+  interactive:6:28: STRING (""")
+  interactive:6:33: STRING ("?")
+  interactive:6:38: STRING ("?")
+  interactive:6:43: STRING ("?")
+  interactive:8:0: (
+  interactive:8:2: )
+  interactive:8:4: {
+  interactive:8:6: }
+  interactive:8:8: ,
+  interactive:8:10: ;
+  interactive:8:12: +
+  interactive:8:14: -
+  interactive:8:16: *
+  interactive:8:18: /
+  interactive:8:20: %
+  interactive:8:22: ~
+  interactive:8:24: ^
+  interactive:8:26: &
+  interactive:8:28: &&
+  interactive:8:31: |
+  interactive:8:33: ||
+  interactive:8:36: = 
+  interactive:8:38: ==
+  interactive:8:41: !
+  interactive:8:43: !=
+  interactive:8:46: <
+  interactive:8:48: <=
+  interactive:8:51: >
+  interactive:8:53: >=
+stderr: ""
+returncode: 0
