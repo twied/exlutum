@@ -1,0 +1,44 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+---
+arguments: [ "--only-parse" ]
+stdin: |-
+  var foobar0 = 0;
+  var foobar1 = "foobar";
+  var foobar2 = true;
+  var foobar3 = false;
+  var foobar4 = -1;
+  function foobar5() {
+  }
+  function foobar6 (foobar7, foobar8, foobar9) {
+    if (true) {
+      foobar0;
+    }
+    if (true) {
+    } else {
+      foobar0;
+    }
+    while (true) {
+      continue;
+      break;
+    }
+    for(var foobar10 = 0; true ; let foobar10 = 0) {
+      foobar0;
+    }
+    var foobar11;
+    var foobar12 = 0;
+    let foobar12 = 0;
+    return;
+    return 0;
+    0 + 0;
+    +0;
+    foobar0(0, 0, 0);
+    &foobar0;
+    false;
+    "";
+    (0 + 0) * 0;
+  }
+  function main() {}
+stdout: ""
+stderr: ""
+returncode: 0

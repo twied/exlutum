@@ -12,6 +12,7 @@
 enum class mode {
     only_io,
     only_lex,
+    only_parse,
     default_mode
 };
 
@@ -84,6 +85,11 @@ static int mode_only_lex(arabilis::Lexer& lexer, arabilis::Writer& writer) {
     return 0;
 }
 
+static int mode_only_parse(arabilis::Parser& parser, arabilis::Writer&) {
+    arabilis::Program program = parser.read();
+    return 0;
+}
+
 int main(int argc, char* argv[]) {
     bool positional_arguments { true };
 
@@ -151,6 +157,16 @@ int main(int argc, char* argv[]) {
                 continue;
             }
 
+            if (arg == "--only-parse") {
+                if (mode != mode::default_mode) {
+                    std::cerr << "Error: Invalid mode combination\n";
+                    std::exit(1);
+                }
+
+                mode = mode::only_parse;
+                continue;
+            }
+
             std::cerr << "Error: Unknown parameter \"" << arg << "\"\n\n";
             usage(std::cerr);
             std::exit(1);
@@ -208,6 +224,12 @@ int main(int argc, char* argv[]) {
 
     if (mode == mode::only_lex) {
         return mode_only_lex(lexer, writer);
+    }
+
+    arabilis::Parser parser { lexer };
+
+    if (mode == mode::only_parse) {
+        return mode_only_parse(parser, writer);
     }
 
     return 1;

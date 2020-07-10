@@ -96,4 +96,13 @@ const char* token_to_name(Token t) {
     throw "invalid token";
 }
 
+AST::~AST() noexcept {
+}
+
+Statement::~Statement() noexcept {
+}
+
+Expression::~Expression() noexcept {
+}
+
 } /* namespace arabilis */
