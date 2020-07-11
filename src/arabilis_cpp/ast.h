@@ -64,6 +64,8 @@ enum class Token {
 
 const char* token_to_name(Token token);
 
+class Visitor;
+
 struct AST {
     explicit AST(const Position& position) noexcept : m_position { position } {
     }
@@ -75,6 +77,8 @@ struct AST {
     AST& operator=(AST&&) noexcept = default;
 
     virtual ~AST() noexcept = 0;
+
+    virtual void visit(Visitor&) const noexcept = 0;
 
     Position m_position;
 };
@@ -90,6 +94,8 @@ struct Statement: public AST {
     Statement& operator=(Statement&&) noexcept = default;
 
     ~Statement() noexcept override = 0;
+
+    void visit(Visitor&) const noexcept override = 0;
 };
 
 struct Expression: public AST {
@@ -103,6 +109,8 @@ struct Expression: public AST {
     Expression& operator=(Expression&&) noexcept = delete;
 
     ~Expression() noexcept override = 0;
+
+    void visit(Visitor&) const noexcept override = 0;
 };
 
 struct GlobalVar: public AST {
@@ -116,6 +124,8 @@ struct GlobalVar: public AST {
     GlobalVar& operator=(GlobalVar&&) noexcept = default;
 
     ~GlobalVar() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 
     std::string m_name;
     std::unique_ptr<Expression> m_value;
@@ -132,6 +142,8 @@ struct Function: public AST {
     Function& operator=(Function&&) noexcept = default;
 
     ~Function() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 
     std::string m_name;
     std::vector<std::string> m_arguments;
@@ -152,6 +164,8 @@ struct Program: public AST {
 
     ~Program() noexcept override = default;
 
+    void visit(Visitor&) const noexcept override;
+
     std::string m_filename;
     std::vector<GlobalVar> m_globalvars;
     std::vector<Function> m_functions;
@@ -169,6 +183,8 @@ struct BreakStatement: public Statement {
     BreakStatement& operator=(BreakStatement&&) noexcept = default;
 
     ~BreakStatement() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 };
 
 struct ContinueStatement: public Statement {
@@ -183,6 +199,8 @@ struct ContinueStatement: public Statement {
     ContinueStatement& operator=(ContinueStatement&&) noexcept = default;
 
     ~ContinueStatement() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 };
 
 struct ExpressionStatement: public Statement {
@@ -199,6 +217,8 @@ struct ExpressionStatement: public Statement {
 
     ~ExpressionStatement() noexcept override = default;
 
+    void visit(Visitor&) const noexcept override;
+
     std::unique_ptr<Expression> m_expression;
 };
 
@@ -214,6 +234,8 @@ struct ForStatement: public Statement {
     ForStatement& operator=(ForStatement&&) noexcept = default;
 
     ~ForStatement() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 
     std::string m_variable_name;
     std::unique_ptr<Expression> m_initial;
@@ -235,6 +257,8 @@ struct IfStatement: public Statement {
 
     ~IfStatement() noexcept override = default;
 
+    void visit(Visitor&) const noexcept override;
+
     std::unique_ptr<Expression> m_condition;
     std::vector<std::unique_ptr<Statement>> m_then_statements;
     std::vector<std::unique_ptr<Statement>> m_else_statements;
@@ -253,6 +277,8 @@ struct LetStatement: public Statement {
 
     ~LetStatement() noexcept override = default;
 
+    void visit(Visitor&) const noexcept override;
+
     std::string m_variable_name;
     std::unique_ptr<Expression> m_expression;
 };
@@ -270,6 +296,8 @@ struct ReturnStatement: public Statement {
 
     ~ReturnStatement() noexcept override = default;
 
+    void visit(Visitor&) const noexcept override;
+
     std::unique_ptr<Expression> m_expression;
 };
 
@@ -285,6 +313,8 @@ struct VarStatement: public Statement {
     VarStatement& operator=(VarStatement&&) noexcept = default;
 
     ~VarStatement() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 
     std::string m_variable_name;
     std::unique_ptr<Expression> m_expression;
@@ -302,6 +332,8 @@ struct WhileStatement: public Statement {
     WhileStatement& operator=(WhileStatement&&) noexcept = default;
 
     ~WhileStatement() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 
     std::unique_ptr<Expression> m_condition;
     std::vector<std::unique_ptr<Statement>> m_statements;
@@ -323,6 +355,8 @@ struct AddressOfExpression: public Expression {
     AddressOfExpression& operator=(AddressOfExpression&&) noexcept = default;
 
     ~AddressOfExpression() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 
     std::string m_variable_name;
 };
@@ -347,6 +381,8 @@ struct BinOpExpression: public Expression {
 
     ~BinOpExpression() noexcept override = default;
 
+    void visit(Visitor&) const noexcept override;
+
     Token m_token;
     std::unique_ptr<Expression> m_lhs;
     std::unique_ptr<Expression> m_rhs;
@@ -369,6 +405,8 @@ struct CallExpression: public Expression {
 
     ~CallExpression() noexcept override = default;
 
+    void visit(Visitor&) const noexcept override;
+
     std::string m_variable_name;
     std::vector<std::unique_ptr<Expression>> m_arguments;
 };
@@ -386,6 +424,8 @@ struct NumeralExpression: public Expression {
     NumeralExpression& operator=(NumeralExpression&&) noexcept = default;
 
     ~NumeralExpression() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 
     int m_value;
 };
@@ -405,6 +445,8 @@ struct StringExpression: public Expression {
     StringExpression& operator=(StringExpression&&) noexcept = default;
 
     ~StringExpression() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 
     std::string m_value;
 };
@@ -427,6 +469,8 @@ struct UnOpExpression: public Expression {
 
     ~UnOpExpression() noexcept override = default;
 
+    void visit(Visitor&) const noexcept override;
+
     Token m_token;
     std::unique_ptr<Expression> m_rhs;
 };
@@ -446,6 +490,8 @@ struct VariableExpression: public Expression {
     VariableExpression& operator=(VariableExpression&&) noexcept = default;
 
     ~VariableExpression() noexcept override = default;
+
+    void visit(Visitor&) const noexcept override;
 
     std::string m_variable_name;
 };

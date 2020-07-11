@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+---
+arguments: [ "--only-parse" ]
+stdin: |-
+  var foobar = 0;
+  var foobar = 0;
+  function main() {}
+stdout: ""
+returncode: 1

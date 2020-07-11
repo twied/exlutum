@@ -6,6 +6,8 @@ add_executable(
 	arabilis.cpp
 	ast.cpp
 	ast.h
+	backend.cpp
+	backend.h
 	frontend.cpp
 	frontend.h
 	io.cpp
@@ -21,3 +23,9 @@ do_test(arabilis_cpp lex_unterminated_string.arabilis)
 do_test(arabilis_cpp parse.arabilis)
 do_test(arabilis_cpp parse_for_name_mismatch.arabilis)
 do_test(arabilis_cpp parse_unexpected_token.arabilis)
+do_test(arabilis_cpp parse_break_outside_loop.arabilis)
+do_test(arabilis_cpp parse_continue_outside_loop.arabilis)
+do_test(arabilis_cpp parse_duplicate_global.arabilis)
+do_test(arabilis_cpp parse_duplicate_local.arabilis)
+do_test(arabilis_cpp parse_missing_main.arabilis)
+do_test(arabilis_cpp parse_unknown_symbol.arabilis)

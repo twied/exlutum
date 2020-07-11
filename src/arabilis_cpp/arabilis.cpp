@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright 2020 Tim Wiederhake
 
-#include "io.h"
+#include "backend.h"
 #include "frontend.h"
+#include "io.h"
 
 #include <algorithm>
 #include <iostream>
@@ -87,6 +88,7 @@ static int mode_only_lex(arabilis::Lexer& lexer, arabilis::Writer& writer) {
 
 static int mode_only_parse(arabilis::Parser& parser, arabilis::Writer&) {
     arabilis::Program program = parser.read();
+    arabilis::check_variable_usage(program);
     return 0;
 }
 

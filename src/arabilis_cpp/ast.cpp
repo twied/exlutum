@@ -3,6 +3,8 @@
 
 #include "ast.h"
 
+#include "backend.h"
+
 namespace arabilis {
 
 const char* token_to_name(Token t) {
@@ -103,6 +105,82 @@ Statement::~Statement() noexcept {
 }
 
 Expression::~Expression() noexcept {
+}
+
+void GlobalVar::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void Function::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void Program::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void BreakStatement::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void ContinueStatement::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void ExpressionStatement::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void ForStatement::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void IfStatement::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void LetStatement::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void ReturnStatement::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void VarStatement::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void WhileStatement::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void AddressOfExpression::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void BinOpExpression::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void CallExpression::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void NumeralExpression::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void StringExpression::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void UnOpExpression::visit(Visitor& visitor) const noexcept {
+    visitor(this);
+}
+
+void VariableExpression::visit(Visitor& visitor) const noexcept {
+    visitor(this);
 }
 
 } /* namespace arabilis */
