@@ -18,6 +18,7 @@ set(EXLUTUM_ARABILIS "arabilis_cpp" CACHE STRING "arabilis compiler")
 set_property(
 	CACHE EXLUTUM_HEX2BIN PROPERTY STRINGS
 	"hex2bin_c"
+	"hex2bin_hex"
 	"hex2bin_nasm"
 )
 
@@ -37,6 +38,10 @@ set_property(
 )
 
 enable_testing()
+
+
+set(EXLUTUM_HEX2BIN "hex2bin_bin" CACHE STRING "hex2bin compiler")
+set_property(CACHE EXLUTUM_HEX2BIN PROPERTY STRINGS "hex2bin_bin" "hex2bin_nasm" "hex2bin_c")
 
 add_subdirectory(src)
 add_subdirectory(examples)

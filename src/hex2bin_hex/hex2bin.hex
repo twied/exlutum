@@ -1,0 +1,123 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright 2020 Tim Wiederhake
+
+                        #   Elf32_Ehdr: 0x08048000
+7F 45 4C 46 01 01 01 00 #       e_ident[0:7]
+00 00 00 00 00 00 00 00 #       e_ident[8:15]
+02 00                   #       e_type
+03 00                   #       e_machine
+01 00 00 00             #       e_version
+54 80 04 08             #       e_entry
+34 00 00 00             #       e_phoff
+00 00 00 00             #       e_shoff
+00 00 00 00             #       e_flags
+34 00                   #       e_ehsize
+20 00                   #       e_phentsize
+01 00                   #       e_phnum
+28 00                   #       e_shentsize
+00 00                   #       e_shnum
+00 00                   #       e_shstrndx
+
+                        #   Elf32_Phdr: 0x08048034
+01 00 00 00             #       p_type
+00 00 00 00             #       p_offset
+00 80 04 08             #       p_vaddr
+00 80 04 08             #       p_paddr
+2A 01 00 00             #       p_filesz
+2A 01 00 00             #       p_memsz
+07 00 00 00             #       p_flags
+00 00 00 00             #       p_align
+
+                        #   _start: 0x08048054
+B9 29 81 04 08          #       mov     ecx,    0x08048129 <temp>
+BA 01 00 00 00          #       mov     edx,    0x00000001
+
+                        #   item: 0x0804805E
+B8 03 00 00 00          #       mov     eax,    0x00000003
+BB 00 00 00 00          #       mov     ebx,    0x00000000
+CD 80                   #       int     0x80
+83 F8 00                #       cmp     eax,    0x00000000
+74 7B                   #       je      0x080480EA <exit0>
+8B 01                   #       mov     eax,    [ecx]
+83 F8 20                #       cmp     eax,    0x00000020
+74 E8                   #       je      0x0804805E <item>
+83 F8 09                #       cmp     eax,    0x00000009
+7C 7B                   #       jl      0x080480F6 <exit1>
+83 F8 0D                #       cmp     eax,    0x0000000D
+7E DE                   #       jle     0x0804805E <item>
+83 F8 23                #       cmp     eax,    0x00000023
+74 7D                   #       je      0x08048102 <discard_comment>
+83 F8 30                #       cmp     eax,    0x00000030
+7C 6C                   #       jl      0x080480F6 <exit1>
+83 F8 39                #       cmp     eax,    0x00000039
+7E 0F                   #       jle     0x0804809E <c1_number>
+83 F8 41                #       cmp     eax,    0x00000041
+7C 62                   #       jl      0x080480F6 <exit1>
+83 F8 46                #       cmp     eax,    0x00000046
+7E 02                   #       jle     0x0804809B <c1_alpha>
+EB 5B                   #       jmp     0x080480F6 <exit1>
+
+                        #   c1_alpha: 0x0804809B
+83 E8 07                #       sub     eax,    0x00000007
+
+                        #   c1_number: 0x0804809E
+83 E8 30                #       sub     eax,    0x00000030
+
+                        #   c1_valid: 0x080480A1
+C1 E0 04                #       shl     eax,    0x00000004
+89 C6                   #       mov     esi,    eax
+B8 03 00 00 00          #       mov     eax,    0x00000003
+BB 00 00 00 00          #       mov     ebx,    0x00000000
+CD 80                   #       int     0x80
+83 F8 00                #       cmp     eax,    0x00000000
+74 3F                   #       je      0x080480F6 <exit1>
+8B 01                   #       mov     eax,    [ecx]
+83 F8 30                #       cmp     eax,    0x00000030
+7C 38                   #       jl      0x080480F6 <exit1>
+83 F8 39                #       cmp     eax,    0x00000039
+7E 0F                   #       jle     0x080480D2 <c2_number>
+83 F8 41                #       cmp     eax,    0x00000041
+7C 2E                   #       jl      0x080480F6 <exit1>
+83 F8 46                #       cmp     eax,    0x00000046
+7E 02                   #       jle     0x080480CF <c2_alpha>
+EB 27                   #       jmp     0x080480F6 <exit1>
+
+                        #   c2_alpha: 0x080480CF
+83 E8 07                #       sub     eax,    0x00000007
+
+                        #   c2_number: 0x080480D2
+83 E8 30                #       sub     eax,    0x00000030
+
+                        #   c2_valid: 0x080480D5
+01 F0                   #       add     eax,    esi
+89 01                   #       mov     [ecx],  eax
+B8 04 00 00 00          #       mov     eax,    0x00000004
+BB 01 00 00 00          #       mov     ebx,    0x00000001
+CD 80                   #       int     0x80
+E9 74 FF FF FF          #       jmp     0x0804805E <item>
+
+                        #   exit0: 0x080480EA
+B8 01 00 00 00          #       mov     eax,    0x00000001
+BB 00 00 00 00          #       mov     ebx,    0x00000000
+CD 80                   #       int     0x80
+
+                        #   exit1: 0x080480F6
+B8 01 00 00 00          #       mov     eax,    0x00000001
+BB 01 00 00 00          #       mov     ebx,    0x00000001
+CD 80                   #       int     0x80
+
+                        #   discard_comment: 0x08048102
+B8 03 00 00 00          #       mov     eax,    0x00000003
+BB 00 00 00 00          #       mov     ebx,    0x00000000
+CD 80                   #       int     0x80
+83 F8 00                #       cmp     eax,    0x00000000
+74 D7                   #       je      0x080480EA <exit0>
+8B 01                   #       mov     eax,    [ecx]
+83 F8 0A                #       cmp     eax,    0x0000000A
+0F 84 40 FF FF FF       #       je      0x0804805E <item>
+83 F8 0D                #       cmp     eax,    0x0000000D
+0F 84 37 FF FF FF       #       je      0x0804805E <item>
+EB D9                   #       jmp     0x08048102 <discard_comment>
+
+                        #   temp: 0x08048129
+FF                      #       db      0xFF
