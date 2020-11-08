@@ -42,6 +42,7 @@ public:
 };
 
 void check_variable_usage(Program&) noexcept;
+void compile_program(Program&, Writer&) noexcept;
 
 } /* namespace arabilis */
 

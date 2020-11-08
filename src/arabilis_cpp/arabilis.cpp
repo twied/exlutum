@@ -86,12 +86,6 @@ static int mode_only_lex(arabilis::Lexer& lexer, arabilis::Writer& writer) {
     return 0;
 }
 
-static int mode_only_parse(arabilis::Parser& parser, arabilis::Writer&) {
-    arabilis::Program program = parser.read();
-    arabilis::check_variable_usage(program);
-    return 0;
-}
-
 int main(int argc, char* argv[]) {
     bool positional_arguments { true };
 
@@ -229,10 +223,13 @@ int main(int argc, char* argv[]) {
     }
 
     arabilis::Parser parser { lexer };
+    arabilis::Program program = parser.read();
+    arabilis::check_variable_usage(program);
 
     if (mode == mode::only_parse) {
-        return mode_only_parse(parser, writer);
+        return 0;
     }
 
-    return 1;
+    arabilis::compile_program(program, writer);
+    return 0;
 }
