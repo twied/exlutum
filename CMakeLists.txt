@@ -10,4 +10,6 @@ project(
 	LANGUAGES CXX C ASM_NASM
 )
 
+enable_testing()
+
 add_subdirectory(src)
