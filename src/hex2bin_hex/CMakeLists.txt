@@ -13,3 +13,10 @@ add_dependencies(
 	hex2bin_hex
 	${EXLUTUM_HEX2BIN}
 )
+
+do_test(hex2bin_hex comments.hex2bin)
+do_test(hex2bin_hex empty.hex2bin)
+do_test(hex2bin_hex helloworld.hex2bin)
+do_test(hex2bin_hex lowercase.hex2bin)
+do_test(hex2bin_hex newlines.hex2bin)
+do_test(hex2bin_hex oddnybbles.hex2bin)
