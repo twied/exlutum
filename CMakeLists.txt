@@ -17,6 +17,7 @@ set(EXLUTUM_ARABILIS "arabilis_cpp" CACHE STRING "arabilis compiler")
 
 set_property(
 	CACHE EXLUTUM_HEX2BIN PROPERTY STRINGS
+	"hex2bin_bin"
 	"hex2bin_c"
 	"hex2bin_hex"
 	"hex2bin_nasm"
