@@ -10,7 +10,7 @@ project(
 	LANGUAGES CXX C ASM_NASM
 )
 
-set(EXLUTUM_HEX2BIN "hex2bin_c" CACHE STRING "hex2bin compiler")
+set(EXLUTUM_HEX2BIN "hex2bin_bin" CACHE STRING "hex2bin compiler")
 set(EXLUTUM_LABEL2HEX "label2hex_cpp" CACHE STRING "label2hex compiler")
 set(EXLUTUM_MACRO2LABEL "macro2label_cpp" CACHE STRING "macro2label compiler")
 set(EXLUTUM_ARABILIS "arabilis_cpp" CACHE STRING "arabilis compiler")
